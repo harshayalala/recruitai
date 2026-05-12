@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RecruitAI — Multi-Agent Resume Intelligence</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#7c3aed" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="RecruitAI" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <meta name="description" content="AI-powered resume screening with 4 agents. Score, rank and interview candidates instantly." />
+  <meta name="mobile-web-app-capable" content="yes" />
+</head>
+<body>
+
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Mobile topbar -->
+  <div class="topbar" id="topbar">
+    <div class="topbar-logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">RecruitAI</span>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Sidebar overlay mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">RecruitAI</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-section="home" onclick="showSection('home')">
+        <span class="nav-icon">🏠</span>Home
+      </button>
+      <button class="nav-item" data-section="upload" onclick="showSection('upload')">
+        <span class="nav-icon">↑</span>Upload
+      </button>
+      <button class="nav-item" data-section="pipeline" onclick="showSection('pipeline')">
+        <span class="nav-icon">◈</span>Pipeline
+      </button>
+      <button class="nav-item" data-section="candidates" onclick="showSection('candidates')">
+        <span class="nav-icon">◎</span>Candidates
+      </button>
+      <button class="nav-item" data-section="leaderboard" onclick="showSection('leaderboard')">
+        <span class="nav-icon">◆</span>Leaderboard
+      </button>
+      <button class="nav-item" data-section="about" onclick="showSection('about')">
+        <span class="nav-icon">ℹ</span>About
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="model-badge">
+        <span class="model-dot"></span>
+        <span>Llama 3.3 · 70B</span>
+      </div>
+      <div class="model-badge" style="margin-top:6px">
+        <span class="model-dot" style="background:var(--teal)"></span>
+        <span>Groq Inference</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content" id="mainContent">
+
+    <!-- HOME -->
+    <section class="section active" id="section-home">
+      <div class="hero">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Powered by Llama 3.3 · 70B via Groq
+        </div>
+        <h1 class="hero-title">
+          AI Resume Screening<br>
+          <span class="hero-gradient">Done Right</span>
+        </h1>
+        <p class="hero-subtitle">
+          Upload resumes and a job description. Our 4-agent AI pipeline analyzes, scores, and ranks candidates instantly — with interview questions included.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg" onclick="showSection('upload')">
+            <span class="btn-icon">⬡</span> Start Screening
+          </button>
+          <button class="btn btn-outline btn-lg" onclick="showSection('about')">
+            Learn More →
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="stat-value">4</div>
+            <div class="stat-label">AI Agents</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <div class="stat-value">100</div>
+            <div class="stat-label">Point Score</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <div class="stat-value">10</div>
+            <div class="stat-label">Resumes/Batch</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <div class="stat-value">Free</div>
+            <div class="stat-label">Always</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card card">
+          <div class="feature-icon">📄</div>
+          <h3 class="feature-title">Resume Analysis</h3>
+          <p class="feature-desc">Extracts skills, experience, education, projects, certifications and tools from any PDF resume.</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Smart Scoring</h3>
+          <p class="feature-desc">Scores candidates 0–100 based on JD match. Detects keyword stuffing and inconsistencies.</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">💬</div>
+          <h3 class="feature-title">Interview Questions</h3>
+          <p class="feature-desc">Generates 5–7 targeted interview questions tailored to each candidate's profile and weaknesses.</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">🏆</div>
+          <h3 class="feature-title">Candidate Ranking</h3>
+          <p class="feature-desc">Ranks all candidates on a leaderboard with A/B/C/D tier classification.</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">Instant Results</h3>
+          <p class="feature-desc">Powered by Groq ultra-fast inference. Full candidate reports in seconds.</p>
+        </div>
+        <div class="feature-card card">
+          <div class="feature-icon">📥</div>
+          <h3 class="feature-title">Export Reports</h3>
+          <p class="feature-desc">Download individual reports as PDF or export all results as JSON.</p>
+        </div>
+      </div>
+
+      <div class="how-section">
+        <h2 class="section-heading">How It Works</h2>
+        <div class="steps-row">
+          <div class="how-step">
+            <div class="how-num">1</div>
+            <h4>Paste Job Description</h4>
+            <p>Enter role requirements, skills needed, and qualifications.</p>
+          </div>
+          <div class="how-arrow">→</div>
+          <div class="how-step">
+            <div class="how-num">2</div>
+            <h4>Upload Resumes</h4>
+            <p>Drag and drop up to 10 PDF resumes.</p>
+          </div>
+          <div class="how-arrow">→</div>
+          <div class="how-step">
+            <div class="how-num">3</div>
+            <h4>AI Analyzes</h4>
+            <p>4 agents process each resume through the pipeline.</p>
+          </div>
+          <div class="how-arrow">→</div>
+          <div class="how-step">
+            <div class="how-num">4</div>
+            <h4>Get Results</h4>
+            <p>View scores, strengths, questions and hire decision.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-box card">
+        <h2 class="cta-title">Ready to screen smarter?</h2>
+        <p class="cta-subtitle">Free forever. No signup required. Just paste a JD and upload resumes.</p>
+        <button class="btn btn-primary btn-lg" onclick="showSection('upload')">
+          <span class="btn-icon">⬡</span> Start Now — It's Free
+        </button>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <span class="logo-icon" style="font-size:18px">⬡</span>
+              <span class="logo-text" style="font-size:16px">RecruitAI</span>
+            </div>
+            <p class="footer-tagline">Multi-agent AI recruitment system built with LangGraph, Groq and Llama 3.3 70B.</p>
+          </div>
+          <div class="footer-links">
+            <div class="footer-col">
+              <div class="footer-col-title">Navigation</div>
+              <button class="footer-link" onclick="showSection('home')">Home</button>
+              <button class="footer-link" onclick="showSection('upload')">Upload</button>
+              <button class="footer-link" onclick="showSection('pipeline')">Pipeline</button>
+              <button class="footer-link" onclick="showSection('about')">About</button>
+            </div>
+            <div class="footer-col">
+              <div class="footer-col-title">Tech Stack</div>
+              <span class="footer-text">LangGraph</span>
+              <span class="footer-text">LangChain</span>
+              <span class="footer-text">Groq API</span>
+              <span class="footer-text">FastAPI</span>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p class="footer-copy">© 2025 RecruitAI. All rights reserved. Built with ❤️ using open-source AI.</p>
+          <p class="footer-copy" style="color:var(--text-muted);font-size:11px;margin-top:4px">Powered by Llama 3.3 70B · Groq Inference · LangGraph Multi-Agent Pipeline</p>
+        </div>
+      </footer>
+    </section>
+
+    <!-- UPLOAD -->
+    <section class="section" id="section-upload">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Resume Intelligence</h1>
+          <p class="page-subtitle">Paste Job Description + Upload Resumes → AI scores and ranks candidates</p>
+        </div>
+        <div class="header-badges">
+          <span class="badge badge-purple">4 AI Agents</span>
+          <span class="badge badge-teal">Real-time</span>
+        </div>
+      </header>
+
+      <div class="pipeline-preview card" id="pipelinePreview">
+        <div class="pipeline-steps">
+          <div class="pipeline-step" id="pstep-1">
+            <div class="step-icon">📄</div>
+            <div class="step-label">Resume<br>Analyzer</div>
+            <div class="step-status" id="ps1-status">Idle</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step" id="pstep-2">
+            <div class="step-icon">📊</div>
+            <div class="step-label">Candidate<br>Scorer</div>
+            <div class="step-status" id="ps2-status">Idle</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step" id="pstep-3">
+            <div class="step-icon">💬</div>
+            <div class="step-label">Interview<br>Generator</div>
+            <div class="step-status" id="ps3-status">Idle</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step" id="pstep-4">
+            <div class="step-icon">✅</div>
+            <div class="step-label">Result<br>Finalizer</div>
+            <div class="step-status" id="ps4-status">Idle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JD - REQUIRED -->
+      <div class="card jd-card">
+        <label class="field-label">
+          Job Description
+          
+        </label>
+       <p class="jd-hint">Optional</p>
+        <textarea
+          id="jobDescription"
+          class="jd-textarea"
+          placeholder="Example: We are looking for a Senior Python Developer with 3+ years experience in FastAPI, LangChain, and cloud deployment. Must have strong skills in REST APIs, SQL, and Docker..."
+          rows="5"
+        ></textarea>
+      </div>
+
+      <div class="upload-zone card" id="uploadZone">
+        <input type="file" id="fileInput" accept=".pdf" multiple hidden />
+        <div class="upload-icon-wrap">
+          <div class="upload-icon">⬆</div>
+        </div>
+        <p class="upload-title">Drop PDFs here or click to browse</p>
+        <p class="upload-subtitle">Up to 10 resumes · PDF only · Max 10MB each</p>
+        <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">
+          Choose Files
+        </button>
+      </div>
+
+      <div class="file-list" id="fileList"></div>
+
+      <div class="action-bar" id="actionBar" style="display:none">
+        <button class="btn btn-primary" id="analyzeBtn" onclick="startAnalysis()">
+          <span class="btn-icon">⬡</span> Analyze Resumes
+        </button>
+        <button class="btn btn-ghost" onclick="clearAll()">Clear All</button>
+        <span class="file-count" id="fileCount"></span>
+      </div>
+
+      <div class="progress-section" id="progressSection" style="display:none">
+        <div class="progress-header">
+          <span id="progressLabel">Processing candidates...</span>
+          <span id="progressCount">0 / 0</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="globalProgressBar"></div>
+        </div>
+        <div class="agent-status-row" id="agentStatusRow"></div>
+      </div>
+
+      <div class="mini-footer">© 2025 RecruitAI — All rights reserved.</div>
+    </section>
+
+    <!-- PIPELINE -->
+    <section class="section" id="section-pipeline">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Agent Pipeline</h1>
+          <p class="page-subtitle">LangGraph sequential workflow visualization</p>
+        </div>
+      </header>
+      <div class="pipeline-detail-grid">
+        <div class="agent-card card">
+          <div class="agent-number">01</div>
+          <div class="agent-icon-large">📄</div>
+          <h3 class="agent-title">Resume Analyzer</h3>
+          <p class="agent-desc">Extracts skills, experience, education, projects, certifications, tools and achievements. Detects missing information and assesses resume quality.</p>
+          <div class="agent-outputs">
+            <span class="tag">Skills</span><span class="tag">Experience</span><span class="tag">Education</span>
+            <span class="tag">Projects</span><span class="tag">Certifications</span><span class="tag">Tools</span>
+          </div>
+        </div>
+        <div class="agent-card card">
+          <div class="agent-number">02</div>
+          <div class="agent-icon-large">📊</div>
+          <h3 class="agent-title">Candidate Scorer</h3>
+          <p class="agent-desc">Scores candidate 0–100 using weighted criteria. Detects keyword stuffing, timeline inconsistencies and suspicious claims.</p>
+          <div class="agent-outputs">
+            <span class="tag">Score 0-100</span><span class="tag">Strengths</span><span class="tag">Weaknesses</span>
+            <span class="tag">ATS Score</span><span class="tag">Red Flags</span>
+          </div>
+        </div>
+        <div class="agent-card card">
+          <div class="agent-number">03</div>
+          <div class="agent-icon-large">💬</div>
+          <h3 class="agent-title">Interview Generator</h3>
+          <p class="agent-desc">Generates 5–7 targeted interview questions. Validates claims, probes inconsistencies and tests technical depth based on candidate profile.</p>
+          <div class="agent-outputs">
+            <span class="tag">Skill Questions</span><span class="tag">Scenario-Based</span>
+            <span class="tag">Gap Analysis</span><span class="tag">Project Dives</span>
+          </div>
+        </div>
+        <div class="agent-card card">
+          <div class="agent-number">04</div>
+          <div class="agent-icon-large">✅</div>
+          <h3 class="agent-title">Result Finalizer</h3>
+          <p class="agent-desc">Produces final hiring recommendation, executive summary report, improvement suggestions and candidate tier ranking.</p>
+          <div class="agent-outputs">
+            <span class="tag">Final Report</span><span class="tag">Recommendation</span>
+            <span class="tag">Tier Rank</span><span class="tag">Suggestions</span>
+          </div>
+        </div>
+      </div>
+      <div class="mini-footer">© 2025 RecruitAI — All rights reserved.</div>
+    </section>
+
+    <!-- CANDIDATES -->
+    <section class="section" id="section-candidates">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Candidate Results</h1>
+          <p class="page-subtitle" id="resultsSubtitle">No candidates analyzed yet.</p>
+        </div>
+        <div class="header-actions" id="headerActions" style="display:none">
+          <button class="btn btn-ghost" onclick="exportAllJSON()">↓ Export JSON</button>
+          <button class="btn btn-outline" onclick="showSection('upload')">+ Add More</button>
+        </div>
+      </header>
+      <div class="candidates-grid" id="candidatesGrid">
+        <div class="empty-state">
+          <div class="empty-icon">◎</div>
+          <p>Upload and analyze resumes to see results here.</p>
+          <button class="btn btn-primary" onclick="showSection('upload')">Upload Resumes</button>
+        </div>
+      </div>
+      <div class="mini-footer">© 2025 RecruitAI — All rights reserved.</div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section class="section" id="section-leaderboard">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Candidate Leaderboard</h1>
+          <p class="page-subtitle">Ranked by AI score · Tier-based classification</p>
+        </div>
+      </header>
+      <div id="leaderboardContent">
+        <div class="empty-state">
+          <div class="empty-icon">◆</div>
+          <p>Analyze resumes to populate the leaderboard.</p>
+          <button class="btn btn-primary" onclick="showSection('upload')">Get Started</button>
+        </div>
+      </div>
+      <div class="mini-footer">© 2025 RecruitAI — All rights reserved.</div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="section-about">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">About RecruitAI</h1>
+          <p class="page-subtitle">Multi-agent AI recruitment system — built free and open</p>
+        </div>
+      </header>
+
+      <div class="card about-card">
+        <div class="modal-section-title">What is RecruitAI?</div>
+        <p class="about-text">RecruitAI is a fully open-source, AI-powered resume screening system. It uses a multi-agent pipeline built with LangGraph to process resumes through 4 specialized AI agents — each performing a specific task in the hiring workflow. The result is a complete candidate evaluation with scores, strengths, weaknesses, red flags, interview questions, and a hiring recommendation — all generated in seconds.</p>
+      </div>
+
+      <div class="card about-card">
+        <div class="modal-section-title">Tech Stack</div>
+        <div class="tech-grid">
+          <div class="tech-item"><div class="tech-icon">🧠</div><div class="tech-name">Llama 3.3 70B</div><div class="tech-desc">Large language model for intelligent analysis</div></div>
+          <div class="tech-item"><div class="tech-icon">⚡</div><div class="tech-name">Groq API</div><div class="tech-desc">Ultra-fast free inference engine</div></div>
+          <div class="tech-item"><div class="tech-icon">🔗</div><div class="tech-name">LangGraph</div><div class="tech-desc">Multi-agent state graph orchestration</div></div>
+          <div class="tech-item"><div class="tech-icon">🦜</div><div class="tech-name">LangChain</div><div class="tech-desc">LLM application framework</div></div>
+          <div class="tech-item"><div class="tech-icon">🚀</div><div class="tech-name">FastAPI</div><div class="tech-desc">High-performance Python backend</div></div>
+          <div class="tech-item"><div class="tech-icon">📄</div><div class="tech-name">pdfplumber</div><div class="tech-desc">PDF text extraction</div></div>
+        </div>
+      </div>
+
+      <div class="card about-card">
+        <div class="modal-section-title">How Scoring Works</div>
+        <div class="scoring-table">
+          <div class="scoring-row"><span class="scoring-label">Skills Match</span><div class="scoring-bar-wrap"><div class="scoring-bar" style="width:40%;background:var(--violet)"></div></div><span class="scoring-pts">40 pts</span></div>
+          <div class="scoring-row"><span class="scoring-label">Experience Relevance</span><div class="scoring-bar-wrap"><div class="scoring-bar" style="width:30%;background:var(--teal)"></div></div><span class="scoring-pts">30 pts</span></div>
+          <div class="scoring-row"><span class="scoring-label">Education Fit</span><div class="scoring-bar-wrap"><div class="scoring-bar" style="width:15%;background:var(--amber)"></div></div><span class="scoring-pts">15 pts</span></div>
+          <div class="scoring-row"><span class="scoring-label">Additional Factors</span><div class="scoring-bar-wrap"><div class="scoring-bar" style="width:15%;background:var(--rose)"></div></div><span class="scoring-pts">15 pts</span></div>
+        </div>
+        <div class="tier-table">
+          <div class="tier-row"><span class="tier-badge tier-A" style="position:static;width:28px;height:28px">A</span><span>Score 80–100 · Strong Hire</span></div>
+          <div class="tier-row"><span class="tier-badge tier-B" style="position:static;width:28px;height:28px">B</span><span>Score 60–79 · Hire</span></div>
+          <div class="tier-row"><span class="tier-badge tier-C" style="position:static;width:28px;height:28px">C</span><span>Score 40–59 · Maybe</span></div>
+          <div class="tier-row"><span class="tier-badge tier-D" style="position:static;width:28px;height:28px">D</span><span>Score 0–39 · No Hire</span></div>
+        </div>
+      </div>
+
+      <div class="card about-card">
+        <div class="modal-section-title">Privacy & Data</div>
+        <p class="about-text">RecruitAI does not store any resumes or personal data. Resume text is sent to Groq API for analysis and is not retained. All results are stored only in your browser session. When you close the tab, all data is cleared. No account or signup required.</p>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <span class="logo-icon" style="font-size:18px">⬡</span>
+              <span class="logo-text" style="font-size:16px">RecruitAI</span>
+            </div>
+            <p class="footer-tagline">Multi-agent AI recruitment system built with LangGraph, Groq and Llama 3.3 70B.</p>
+          </div>
+          <div class="footer-links">
+            <div class="footer-col">
+              <div class="footer-col-title">Navigation</div>
+              <button class="footer-link" onclick="showSection('home')">Home</button>
+              <button class="footer-link" onclick="showSection('upload')">Upload</button>
+              <button class="footer-link" onclick="showSection('pipeline')">Pipeline</button>
+              <button class="footer-link" onclick="showSection('about')">About</button>
+            </div>
+            <div class="footer-col">
+              <div class="footer-col-title">Tech Stack</div>
+              <span class="footer-text">LangGraph</span>
+              <span class="footer-text">LangChain</span>
+              <span class="footer-text">Groq API</span>
+              <span class="footer-text">FastAPI</span>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p class="footer-copy">© 2025 RecruitAI. All rights reserved. Built with ❤️ using open-source AI.</p>
+          <p class="footer-copy" style="color:var(--text-muted);font-size:11px;margin-top:4px">Powered by Llama 3.3 70B · Groq Inference · LangGraph Multi-Agent Pipeline</p>
+        </div>
+      </footer>
+    </section>
+
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="detailModal">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title" id="modalTitle">Candidate Detail</h2>
+        <p class="modal-subtitle" id="modalSubtitle"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="exportCurrentPDF()">↓ PDF</button>
+        <button class="btn btn-ghost" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => {
+            console.log('[RecruitAI] Service Worker registered:', reg.scope);
+
+            // Show install banner
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', e => {
+              e.preventDefault();
+              deferredPrompt = e;
+              showInstallBanner(deferredPrompt);
+            });
+          })
+          .catch(err => console.warn('[RecruitAI] SW registration failed:', err));
+      });
+    }
+
+    function showInstallBanner(prompt) {
+      const existing = document.getElementById('installBanner');
+      if (existing) return;
+
+      const banner = document.createElement('div');
+      banner.id = 'installBanner';
+      banner.style.cssText =
+        'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);' +
+        'background:#1a1033;border:1px solid rgba(124,58,237,0.5);' +
+        'color:#f1f5f9;padding:14px 20px;border-radius:12px;' +
+        'display:flex;align-items:center;gap:14px;z-index:9999;' +
+        'box-shadow:0 8px 32px rgba(0,0,0,0.5);font-family:DM Sans,sans-serif;' +
+        'font-size:14px;white-space:nowrap;animation:fade-up 0.3s ease;';
+      banner.innerHTML =
+        '<span style="font-size:20px">⬡</span>' +
+        '<span>Install <strong>RecruitAI</strong> as an app</span>' +
+        '<button onclick="installApp()" style="background:linear-gradient(135deg,#7c3aed,#2dd4bf);border:none;color:white;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-family:inherit;font-size:13px">Install</button>' +
+        '<button onclick="document.getElementById(\'installBanner\').remove()" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:18px;padding:0 4px">✕</button>';
+      document.body.appendChild(banner);
+
+      window._installPrompt = prompt;
+    }
+
+    async function installApp() {
+      const prompt = window._installPrompt;
+      if (!prompt) return;
+      prompt.prompt();
+      const result = await prompt.userChoice;
+      console.log('[RecruitAI] Install result:', result.outcome);
+      const banner = document.getElementById('installBanner');
+      if (banner) banner.remove();
+    }
+  </script>
+</body>
+</html>
